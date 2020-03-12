@@ -9,15 +9,19 @@ let socket;
 function App() {
 
   const [ text, setText ] = useState('');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     socket = io('http://localhost:3000');
+    
     socket.on('connect', function(){
       console.log('Connected socket');
     });
 
-    socket.on('message', (msg) => {
-      console.log(msg);
+    socket.on('message', ({ msg }) => {
+      console.log('msg', msg);
+      
+      setMessage(msg);
     });
 
     socket.on('updateText', ({ text }) => {
@@ -33,6 +37,7 @@ function App() {
 
   return (
     <div className="App">
+      {message && <h2>{ message } </h2>}
       <TextField 
         multiline 
         rowsMax="20"
